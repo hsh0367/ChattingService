@@ -1,19 +1,12 @@
 package com.example.demo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import  javax.persistence.*;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class User implements Serializable {
 	@Id
 	@Column(name = "User_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +15,13 @@ public class User {
 	@Column(name = "User_name")
 	private String name;
 
-	@OneToMany(mappedBy = "User")
-	private List<User> users = new ArrayList<User>();
-
-	protected User() {
+//	@OneToMany(cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY,mappedBy = "User")
+	
+	private ArrayList<Chat> chats = new ArrayList<Chat>();
+	
+	
+	public User() {
 	}
 
 	public User(String name) {
@@ -42,6 +38,9 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public ArrayList getChats() {
+		return chats;
 	}
 
 	@Override
