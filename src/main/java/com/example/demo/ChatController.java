@@ -1,7 +1,11 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ChatController {
@@ -21,6 +26,20 @@ public class ChatController {
 	private UserRepository userRepository;
 	@Autowired
 	private ChatRepository chatRepository;
+
+	private static String getRandomString() {
+		StringBuffer buffer = new StringBuffer();
+		Random ran = new Random();
+		
+		String chars[] = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0".split(",");
+		
+		
+		for(int i=0;i<10;i++) {
+			buffer.append(chars[ran.nextInt(chars.length)]);
+		}
+		
+		return buffer.toString();
+	}
 
 	// user proxy check
 	public static String getClientIpAddr(HttpServletRequest request) {
@@ -59,22 +78,36 @@ public class ChatController {
 
 	@RequestMapping("/")
 	public String index(HttpServletRequest request) {
-		User user = new User();
-		user.setName("test");
-		
+		User user1 = new User();
+		User user2 = new User();
+
+		user1.setName(getRandomString());
+
 		Chat chat1 = new Chat("sdasd");
 		Chat chat2 = new Chat("qweqw");
-		chat1.setUser(user);
-		chat2.setUser(user);
-			
-		user.getChats().add(chat1);
-		user.getChats().add(chat2);
-		
-		userRepository.save(user);
-		
-		
-		System.out.println(userRepository.findById((long) 0));
-//		
+		chat1.setUser(user1);
+		chat2.setUser(user1);
+
+		Chat chat3 = new Chat("xzcq");
+		Chat chat4 = new Chat("ceqsc");
+		chat3.setUser(user2);
+		chat4.setUser(user2);
+
+		user1.getChats().add(chat1);
+		user1.getChats().add(chat2);
+		user2.getChats().add(chat3);
+		user2.getChats().add(chat4);
+
+		userRepository.save(user1);
+		userRepository.save(user2);
+
+		for (Chat test : chatRepository.findAll()) {
+
+			System.out.println(test.toString());
+		}
+
+//		System.out.println("object: "+user.getChats());
+//
 //		String userIp = request.getRemoteAddr();
 //		// client ip adress
 //		System.out.println("user ip test : " + userIp);
@@ -122,4 +155,19 @@ public class ChatController {
 		return "index";
 	}
 
+	@RequestMapping("/chat")
+	public @ResponseBody ArrayList<Chat> chat() {
+
+		return (ArrayList<Chat>) chatRepository.findAll();
+	}
+
+	@RequestMapping("/chat/{chat_id}")
+	public @ResponseBody ArrayList<Chat> chat(@PathVariable Optional<Long> chat_id) {
+		if (chat_id.isPresent()) {
+
+			return (ArrayList) chatRepository.findByIdGreaterThan(chat_id.get());
+		} else {
+			return (ArrayList<Chat>) chatRepository.findAll();
+		}
+	}
 }

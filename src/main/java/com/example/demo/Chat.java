@@ -59,7 +59,8 @@ public class Chat implements Serializable {// 채팅 디비파일
 	}
 	@Override
 	public String toString() {
-		return String.format("Chat[id='%d', msg='%s']", id, msgContext);
+		return String.format("User[id='%d',name='%s']Chat[id='%d', msg='%s']", user.getId(),user.getName(),id, msgContext);
+
 	}
 
 }

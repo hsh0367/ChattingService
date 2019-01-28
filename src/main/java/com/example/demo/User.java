@@ -2,6 +2,8 @@ package com.example.demo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.*;
+
 import  javax.persistence.*;
 
 @Entity
@@ -18,9 +20,11 @@ public class User implements Serializable {
 //	@OneToMany(cascade = CascadeType.ALL,
 //            fetch = FetchType.LAZY,mappedBy = "User")
 	
-	private ArrayList<Chat> chats = new ArrayList<Chat>();
 	
-	
+	  @OneToMany(cascade = CascadeType.ALL,
+	            fetch = FetchType.LAZY,
+	            mappedBy = "user")
+	    private Set<Chat> chats = new HashSet<>();
 	public User() {
 	}
 
@@ -39,12 +43,22 @@ public class User implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList getChats() {
+	public Set getChats() {
 		return chats;
+	}
+	public void setChats(Set chats) {
+		this.chats = chats;
 	}
 
 	@Override
 	public String toString() {
 		return String.format("User[id='%d', name='%s']", id, name);
 	}
+	public void viewChats() {
+		
+		for(Chat chatData : chats) {
+			System.out.println(chatData.toString());
+		}
+	}
+
 }
