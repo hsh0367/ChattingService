@@ -17,23 +17,31 @@ public class User implements Serializable {
 	@Column(name = "User_name")
 	private String name;
 
-//	@OneToMany(cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY,mappedBy = "User")
+	@Column(name = "User_ip")
+	private String ip;
+
 	
-	
-	  @OneToMany(cascade = CascadeType.ALL,
-	            fetch = FetchType.LAZY,
+	 @OneToMany(cascade = CascadeType.ALL,
+	            fetch = FetchType.EAGER,
 	            mappedBy = "user")
-	    private Set<Chat> chats = new HashSet<>();
+	private Set<Chat> chats = new HashSet<>();
+	  
 	public User() {
 	}
 
 	public User(String name) {
 		this.name = name;
 	}
+	public User(String name,String ip) {
+		this.name = name;
+		this.ip = ip;
+	}
 
 	public Long getId() {
 		return id;
+	}
+	public String getIp() {
+		return ip;
 	}
 
 	public String getName() {

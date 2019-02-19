@@ -24,7 +24,7 @@ public class Chat implements Serializable {// 채팅 디비파일
 	@Column(name = "Chat_msg")
 	private String msgContext;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "User_id")
 	private User user;
 
@@ -37,7 +37,10 @@ public class Chat implements Serializable {// 채팅 디비파일
 	public Chat(String msg) {
 		this.msgContext = msg;
 	}
-
+	public Chat(String msg,User user) {
+		this.msgContext = msg;
+		this.user = user;
+	}
 	public Long getId() {
 		return id;
 	}
